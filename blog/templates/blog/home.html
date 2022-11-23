@@ -1,0 +1,68 @@
+{% extends 'users/base.html' %}
+{% load static %}}
+{% block title %} Home Page {% endblock %}
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header"><h5>Write Post</h5></div>
+    <div class="card-body">
+        <a href="{% url 'create_post' %}" class="text-decoration-none">
+            <input type="text" class="form-control" placeholder="Write Your Post Here">
+        </a>
+    </div>
+</div>
+{% for post in posts %}
+<div class="card mb-4">
+    <div class="card-header d-flex">
+        <div>
+            <img src="{{ post.author.profile.image.url }}" class="rounded" alt="" width="40">
+        </div> <div> &nbsp; &nbsp; </div>
+        <div>
+            <a href="#" class="text-success text-decoration-none fw-bold">{{ post.author.username }}</a>
+            <div class="small">{{ post.time_created|timesince }} ago</div>
+        </div>
+        {% if user != post.author %}
+        <div>
+            <a href="#" data-id="{{ post.author.id }}" data-action="{% if user.profile in post.author.profile.followers.all %}un{% endif %}follow" class="follow follow-{{ post.author.id }}">
+                {% if user.profile not in post.author.profile.followers.all %} 
+                    Follow 
+                {% else %}
+                    Unfollow 
+                {% endif %}
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title"><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h5>
+        <p class="card-text">{{ post.content }}</p>
+        <!-- <p></p><a href="#" class="btn btn-primary">Go somewhere</a></p> -->
+        {% if post.image.url is not None %}
+        <div>
+            <img src="{{ post.image.url }}" class="w-100" alt="">
+        </div>
+        {% endif %}
+    </div>
+    
+
+    <div class="card-footer">
+        <a href="#" data-id="{{ post.id }}" data-action="{% if user in post.users_like.all %}un{% endif %}like" class="like" id="like-{{ post.id }}">
+            {% if user not in post.users_like.all %} 
+                Like 
+            {% else %}
+                Unlike 
+            {% endif %}
+        </a>
+        <span class="count me-5">
+            <span class="total text-muted" id="total-{{ post.id }}">{{ post.users_like.count }}</span>
+        </span>
+        <span class="me-5"><a href="">Comment</a></span> <span>Share</span>
+      
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+
+
+user = User.objects.filter(username=victor24).first()
+post = user.post_set.all()

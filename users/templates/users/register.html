@@ -1,0 +1,38 @@
+{% extends 'users/base.html' %}
+{% block title %} Register {% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="card mb-4">                          
+    <form method="POST" action="" class="mt-3 ms-2 me-2"> 
+                {% csrf_token %}  
+        <div class="mt-2 mb-3">
+            {{ signupform.first_name|as_crispy_field }}
+        </div>             
+        <div class="mt-2 mb-3">
+            {{ signupform.last_name|as_crispy_field }}          
+        </div>
+        <div class="mb-3">
+            {{ signupform.username|as_crispy_field }}           
+        </div>
+        <div class="mb-3">
+            {{ signupform.email|as_crispy_field }}           
+        </div>  
+        <div class="mt-2 mb-3">
+            {{ signupform.password1|as_crispy_field }}
+        </div>
+        <div class="mb-3">
+            {{ signupform.password2|as_crispy_field }}
+        </div>
+            <button class="btn btn-success">
+                Create Account
+            </button>
+    </form>
+    <div class="ms-3 mb-2">                   
+       Have an account? | <a href="{% url  'login' %}">Sign in</a>
+    </div>
+</div>
+{% endblock %}
+
+
